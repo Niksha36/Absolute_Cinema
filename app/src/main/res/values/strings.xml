@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Absolute_Cinema</string>
+    <string name="bottomNavItemMain">Главное</string>
+    <string name="bottomNavItemSearch">Поиск</string>
+    <string name="bottomNavItemFavorite">Моё</string>
+    <string name="tabPopular">Популярное</string>
+    <string name="tabNew">Новинки</string>
+    <string name="tabForKids">Детям</string>
+</resources>
