@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Doc(
-    val enName: String?,
-    val genres: List<Genre>,
-    val name: String?,
-    val alternativeName: String?,
+    val enName: String? = null,
+    val genres: List<Genre> = emptyList(),
+    val name: String? = null,
+    val alternativeName: String? = null,
     val poster: Poster,
     val rating: Rating
 )

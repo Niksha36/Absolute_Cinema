@@ -1,7 +1,9 @@
 package com.example.absolute_cinema.util
 
-enum class SortTypes {
-    TOP_MOVIES,
-    LATEST_MOVIES,
-    FOR_KIDS
+import com.example.absolute_cinema.R
+
+enum class SortTypes(val displayNameResId: Int) {
+    TOP_MOVIES(R.string.tabPopular),
+    LATEST_MOVIES(R.string.tabNew),
+    FOR_KIDS(R.string.tabForKids)
 }

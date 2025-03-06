@@ -1,8 +1,10 @@
 package com.example.absolute_cinema.util
 
+import androidx.compose.ui.graphics.Color
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import kotlin.math.round
 
 object UtilFunctions {
     fun getYearInterval(): String {
@@ -16,5 +18,20 @@ object UtilFunctions {
         val previousYearDateString = dateFormat.format(previousYearDate)
 
         return "$previousYearDateString-$currentDateString"
+    }
+
+    fun ratingColor(rating: Double): Color {
+        return when {
+            rating > 7.4 -> Color.Green
+            rating <= 7.4 -> Color.Gray
+            else -> Color.Red
+        }
+    }
+
+    fun avgRating(rating1: Double?, rating2: Double?): Double {
+        val r1 = rating1 ?: 0.0
+        val r2 = rating2 ?: 0.0
+        val average = if (r1 == 0.0) r2 else if (r2 == 0.0) r1 else ((r1 + r2) / 2.0)
+        return round(average * 10) / 10.0
     }
 }

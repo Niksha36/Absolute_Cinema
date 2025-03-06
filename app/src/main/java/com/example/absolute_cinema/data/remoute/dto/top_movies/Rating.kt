@@ -7,5 +7,5 @@ data class Rating(
     val filmCritics: Double?,
     val imdb: Double?,
     val kp: Double?,
-    val russianFilmCritics: Int?
+    val russianFilmCritics: Double?
 )
