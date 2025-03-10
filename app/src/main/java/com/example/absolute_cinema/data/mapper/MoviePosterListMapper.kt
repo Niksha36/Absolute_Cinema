@@ -14,7 +14,8 @@ fun TopMoviesDto.toMoviePosterList(): List<MoviePoster> {
             filmCritics = it.rating.filmCritics,
             imdb = it.rating.imdb,
             kp = it.rating.kp,
-            russianFilmCritics = it.rating.russianFilmCritics
+            russianFilmCritics = it.rating.russianFilmCritics,
+            movieId = it.id,
         )
     }
     return movies

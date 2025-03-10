@@ -1,4 +1,4 @@
-package com.example.absolute_cinema.data.remoute.dto.top_movies
+package com.example.absolute_cinema.data.remoute.dto.common
 
 import kotlinx.serialization.Serializable
 

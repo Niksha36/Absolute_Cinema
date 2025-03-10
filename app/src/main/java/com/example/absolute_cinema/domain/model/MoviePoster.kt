@@ -1,6 +1,7 @@
 package com.example.absolute_cinema.domain.model
 
 data class MoviePoster(
+    val movieId: Int,
     val engName: String?,
     val alternativeName: String?,
     val genres: List<String>,

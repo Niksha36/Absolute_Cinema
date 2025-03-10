@@ -6,4 +6,7 @@
     <string name="tabPopular">Популярное</string>
     <string name="tabNew">Новинки</string>
     <string name="tabForKids">Детям</string>
+    <string name="location_Russia">Россия</string>
+    <string name="location_world">Мир</string>
+    <string name="location_USA">США</string>
 </resources>
