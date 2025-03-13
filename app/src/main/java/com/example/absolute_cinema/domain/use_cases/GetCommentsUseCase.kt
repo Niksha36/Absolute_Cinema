@@ -12,18 +12,15 @@ import javax.inject.Inject
 class GetCommentsUseCase @Inject constructor(
     val repository: MovieRepository
 ) {
-    operator fun invoke(movieId: Int, page: Int, limit: Int): Flow<Resource<List<MovieComment>>> = flow {
-        emit(Resource.Loading())
+    suspend operator fun invoke(movieId: Int, page: Int, limit: Int): Resource<List<MovieComment>> =
         try {
             val comments = repository.getMovieComments(movieId, page, limit)
-            emit(Resource.Success(comments))
+            Resource.Success(comments)
         } catch (e: HttpException) {
-            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occured"))
+            Resource.Error(e.localizedMessage ?: "An unexpected error occured")
         } catch (e: IOException) {
-            emit(Resource.Error("Couldn't reach server. Check your internet connection."))
+            Resource.Error("Couldn't reach server. Check your internet connection.")
         } catch (e: Exception) {
-            emit(Resource.Error(e.message.toString()))
+            Resource.Error(e.message.toString())
         }
-    }
-
 }
