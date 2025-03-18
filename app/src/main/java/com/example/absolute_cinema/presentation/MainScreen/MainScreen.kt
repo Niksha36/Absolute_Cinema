@@ -1,5 +1,6 @@
 package com.example.absolute_cinema.presentation.MainScreen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.absolute_cinema.presentation.common.ErrorDialog
 import com.example.absolute_cinema.presentation.common.MovieCard
 import com.example.absolute_cinema.util.SortTypes
 import com.example.absolute_cinema.util.UtilFunctions
@@ -33,7 +35,8 @@ import com.example.absolute_cinema.util.UtilFunctions
 @Composable
 fun MainScreen(
     state: MainScreenState,
-    onEvent: (MainScreenEvent) -> Unit
+    onEvent: (MainScreenEvent) -> Unit,
+    onNavigation: (Int) -> Unit
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabItems = SortTypes.entries
@@ -75,7 +78,8 @@ fun MainScreen(
                     MovieCard(
                         poster = movie.posterImg,
                         name = movie.name ?: "",
-                        rating = UtilFunctions.avgRating(movie.imdb, movie.kp)
+                        rating = UtilFunctions.avgRating(movie.imdb, movie.kp),
+                        onClick = { onNavigation(movie.movieId) }
                     )
                 }
             }
@@ -83,6 +87,9 @@ fun MainScreen(
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
+            }
+            if(state.error.isNotBlank()){
+                ErrorDialog(state.error, onRetry = { onEvent(MainScreenEvent.Retry) })
             }
         }
     }

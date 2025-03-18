@@ -6,7 +6,7 @@ data class MoviePoster(
     val alternativeName: String?,
     val genres: List<String>,
     val name: String?,
-    val posterImg: String,
+    val posterImg: String?,
     val filmCritics: Double?,
     val imdb: Double?,
     val kp: Double?,

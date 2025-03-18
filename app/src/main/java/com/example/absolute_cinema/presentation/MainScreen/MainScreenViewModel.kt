@@ -1,5 +1,6 @@
 package com.example.absolute_cinema.presentation.MainScreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.absolute_cinema.domain.use_cases.GetForKidsUseCase
@@ -28,8 +29,9 @@ class MainScreenViewModel @Inject constructor(
     private val _sortType = MutableStateFlow(SortTypes.TOP_MOVIES)
     private val _state = MutableStateFlow(MainScreenState())
     private val _page = MutableStateFlow(1)
+    private val _retryTrigger = MutableStateFlow(0)
 
-    val moviesResponse = combine(_sortType, _page) { sortType, page ->
+    val moviesResponse = combine(_sortType, _page, _retryTrigger) { sortType, page, _ ->
         sortType to page
     }.flatMapLatest { (sortType, page) ->
         when (sortType) {
@@ -73,8 +75,8 @@ class MainScreenViewModel @Inject constructor(
             )
         }
 
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MainScreenState())
-
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, MainScreenState())
+    //.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MainScreenState())
     fun onEvent(event: MainScreenEvent) {
         when (event) {
             is MainScreenEvent.ChangingCategory -> {
@@ -89,6 +91,18 @@ class MainScreenViewModel @Inject constructor(
             is MainScreenEvent.ChangingPage -> {
                 _page.update { event.page }
             }
+
+            MainScreenEvent.Retry -> {
+                _retryTrigger.value += 1
+            }
         }
+    }
+    init {
+        Log.d("MainScreenViewModel", "ViewModel created")
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("MainScreenViewModel", "ViewModel cleared")
     }
 }

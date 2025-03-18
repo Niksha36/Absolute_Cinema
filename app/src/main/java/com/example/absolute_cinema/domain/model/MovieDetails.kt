@@ -15,6 +15,7 @@ import com.example.absolute_cinema.domain.model.common.StreamingPlatform
 
 data class MovieDetails(
     val id: Int,
+    val year: Int?,
     val ageRating: Int?,
     val alternativeName: String?,
     val previewImage: String?,
@@ -23,6 +24,7 @@ data class MovieDetails(
     val description: String?,
     val shortDescription: String?,
     val enName: String?,
+    val name: String,
     val facts: List<MovieFact>?,
     val boxOffice: BoxOffice?,
     val genres: List<String>?,

@@ -34,6 +34,7 @@ object AppModule {
 
         val json = Json {
             ignoreUnknownKeys = true
+            explicitNulls = false
         }
 
         return Retrofit.Builder()

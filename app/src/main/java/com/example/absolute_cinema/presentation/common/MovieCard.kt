@@ -1,6 +1,7 @@
 package com.example.absolute_cinema.presentation.common
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,12 +27,13 @@ import com.example.absolute_cinema.util.UtilFunctions.ratingColor
 
 @Composable
 fun MovieCard(
-    poster: String,
+    poster: String?,
     name: String,
-    rating: Double
+    rating: Double,
+    onClick: () -> Unit
 ) {
 
-    Column(modifier = Modifier.wrapContentSize()) {
+    Column(modifier = Modifier.wrapContentSize().clickable { onClick() }) {
         Box(modifier = Modifier.wrapContentSize()) {
             AsyncImage(
                 model = poster,
@@ -66,7 +68,6 @@ fun MovieCard(
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Left,
             style = MaterialTheme.typography.titleMedium,
-//            modifier = Modifier.fillMaxWidth()
         )
     }
 

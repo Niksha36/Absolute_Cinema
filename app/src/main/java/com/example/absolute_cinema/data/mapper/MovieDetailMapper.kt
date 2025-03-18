@@ -142,7 +142,17 @@ fun MovieDetailDto.movieDetailMapper(): MovieDetails {
                 type = episode.type,
                 year = episode.year
             )
-        }
+        },
+        name = if (!name.isNullOrBlank()) {
+            name
+        } else if (!enName.isNullOrBlank()) {
+            enName
+        } else if (!alternativeName.isNullOrBlank()) {
+            alternativeName
+        } else {
+            ""
+        },
+        year = year,
     )
 }
 

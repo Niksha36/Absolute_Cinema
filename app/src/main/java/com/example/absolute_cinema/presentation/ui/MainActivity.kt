@@ -1,6 +1,7 @@
 package com.example.absolute_cinema.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,18 +20,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.absolute_cinema.R
-import com.example.absolute_cinema.presentation.MainScreen.MainScreen
-import com.example.absolute_cinema.presentation.MainScreen.MainScreenViewModel
+import com.example.absolute_cinema.presentation.navigation.Destination
+import com.example.absolute_cinema.presentation.navigation.Navigation
 import com.example.absolute_cinema.util.NavigationItem
 import com.example.compose.Absolute_CinemaTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,43 +58,62 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    Absolute_CinemaTheme {
-//        Greeting("Android")
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    Absolute_CinemaTheme {
+        AppScreen()
+    }
+}
 
 @Composable
 fun AppScreen() {
-
+    val navController = rememberNavController()
     var selectedItem by remember{ mutableIntStateOf(0) }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     val navItems = listOf(
         NavigationItem(
             stringResource(R.string.bottomNavItemMain),
-            Icons.Filled.Home
+            Icons.Filled.Home,
+            Destination.Home
         ),
         NavigationItem(
             stringResource(R.string.bottomNavItemSearch),
-            Icons.Filled.Search
+            Icons.Filled.Search,
+            Destination.Search
         ),
         NavigationItem(
             stringResource(R.string.bottomNavItemFavorite),
-            Icons.Filled.Favorite
+            Icons.Filled.Favorite,
+            Destination.Favorite
         )
     )
+    val listOfRoutes = navItems.map{it.route::class.qualifiedName}
     Scaffold(
         modifier = Modifier.systemBarsPadding(),
         bottomBar = {
+
             NavigationBar {
                 navItems.forEachIndexed { index, navigationItem ->
+                    Log.e("NAVIGATIONN", currentRoute.toString())
                     NavigationBarItem(
-                        label = { Text(navigationItem.label) },
+                        label = { Text(navigationItem.label)},
                         icon = { Icon(navigationItem.icon,  contentDescription = navigationItem.label) },
-                        selected = selectedItem == index,
-                        onClick = { selectedItem = index}
+                        //очевидно, совсем не оптимально, но я не знаю как сделать лучше
+                        selected = if (currentRoute in listOfRoutes) currentRoute == navigationItem.route::class.qualifiedName else navItems[selectedItem].route==navigationItem.route,
+                        onClick = {
+                            selectedItem = index
+                            navController.navigate(navigationItem.route) {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+
                     )
                 }
             }
@@ -103,19 +124,7 @@ fun AppScreen() {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            when (selectedItem) {
-                0 -> {
-                    val mainScreenViewModel: MainScreenViewModel = hiltViewModel()
-                    val state by mainScreenViewModel.state.collectAsState()
-                    MainScreen(
-                        state = state,
-                        onEvent = mainScreenViewModel::onEvent
-                    )
-                }
-                1 -> {}
-                2 -> {}
-                // Add more cases as needed.
-            }
+            Navigation(navController = navController)
         }
     }
 }

@@ -28,7 +28,7 @@ object UtilFunctions {
         }
     }
 
-    fun avgRating(rating1: Double?, rating2: Double?): Double {
+    fun avgRating(rating1: Double? = null, rating2: Double? = null): Double {
         val r1 = rating1 ?: 0.0
         val r2 = rating2 ?: 0.0
         val average = if (r1 == 0.0) r2 else if (r2 == 0.0) r1 else ((r1 + r2) / 2.0)

@@ -49,7 +49,7 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMovieById(id: Int): MovieDetails {
-        return api.getMovieDetailsByID(id).movieDetailMapper()
+        return api.getMovieDetailsByID(id, API_KEY).movieDetailMapper()
     }
 
     override suspend fun getMovieComments(movieId: Int, page: Int, limit: Int): List<MovieComment> {

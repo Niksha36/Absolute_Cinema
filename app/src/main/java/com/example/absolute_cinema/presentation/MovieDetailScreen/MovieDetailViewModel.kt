@@ -1,13 +1,16 @@
 package com.example.absolute_cinema.presentation.MovieDetailScreen
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.example.absolute_cinema.domain.use_cases.GetCommentsUseCase
 import com.example.absolute_cinema.domain.use_cases.GetMovieDetailsUseCase
+import com.example.absolute_cinema.presentation.navigation.Destination
 import com.example.absolute_cinema.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -18,13 +21,14 @@ import javax.inject.Inject
 class MovieDetailViewModel @Inject constructor(
     val movieDetailsUseCase: GetMovieDetailsUseCase,
     val commentsUseCase: GetCommentsUseCase,
-    val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     var state by mutableStateOf(MovieDetailScreenState())
 
     init {
         viewModelScope.launch {
-            val id = savedStateHandle.get<Int>("id") ?: return@launch
+            val id = savedStateHandle.toRoute<Destination.MovieDetails>().movieId
+            Log.d("MovieDetailViewModel", "Movie id: $id")
             state = state.copy(isLoadingDetails = true, isLoadingComments = true)
             val commentsResponse = async {
                 commentsUseCase(

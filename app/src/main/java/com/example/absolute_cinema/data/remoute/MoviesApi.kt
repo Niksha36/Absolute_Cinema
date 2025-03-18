@@ -5,6 +5,7 @@ import com.example.absolute_cinema.data.remoute.dto.comments.CommentsDto
 import com.example.absolute_cinema.data.remoute.dto.top_movies.TopMoviesDto
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MoviesApi {
@@ -49,10 +50,11 @@ interface MoviesApi {
 
     @GET("v1.4/movie/{id}")
     suspend fun getMovieDetailsByID(
-        @Query("id") id: Int
+        @Path("id") id: Int,
+        @Header("X-API-KEY") apiKey: String
     ): MovieDetailDto
 
-    @GET("v1.4/movie/review")
+    @GET("v1.4/review")
     suspend fun getMovieComments(
         @Query("movieId") movieId: Int,
         @Query("page") page: Int,

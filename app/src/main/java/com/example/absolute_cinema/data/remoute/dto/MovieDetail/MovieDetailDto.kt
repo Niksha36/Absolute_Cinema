@@ -3,7 +3,9 @@ package com.example.absolute_cinema.data.remoute.dto.MovieDetail
 import com.example.absolute_cinema.data.remoute.dto.common.Genre
 import com.example.absolute_cinema.data.remoute.dto.common.Poster
 import com.example.absolute_cinema.data.remoute.dto.common.Rating
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MovieDetailDto(
     val ageRating: Int?,
     val alternativeName: String?,
@@ -12,7 +14,7 @@ data class MovieDetailDto(
     val budget: Budget,
     val countries: List<Country>?,
     val description: String?,
-    val distributors: Distributors,
+    val distributors: Distributors?,
     val enName: String?,
     val externalId: ExternalId?,
     val facts: List<Fact>?,
@@ -28,7 +30,7 @@ data class MovieDetailDto(
     val poster: Poster?,
     val productionCompanies: List<ProductionCompany>?,
     val rating: Rating?,
-    val ratingMpaa: String,
+    val ratingMpaa: String?,
     val seasonsInfo: List<SeasonsInfo>?,
     val sequelsAndPrequels: List<SequelsAndPrequel>?,
     val shortDescription: String?,
