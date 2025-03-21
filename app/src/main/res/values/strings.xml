@@ -9,4 +9,9 @@
     <string name="location_Russia">Россия</string>
     <string name="location_world">Мир</string>
     <string name="location_USA">США</string>
+    <string name="share_action">Поделиться</string>
+    <string name="will_watch_later_action">Буду смотреть</string>
+    <string name="ExpandedContTypeFacts">Удивительные факты</string>
+    <string name="ExpandedContTypeComments">Комментарии</string>
+    <string name="ExpandedContTypeSingleComment">ОТЗЫВ</string>
 </resources>

@@ -11,7 +11,7 @@ data class MovieDetailDto(
     val alternativeName: String?,
     val audience: List<Audience>?,
     val backdrop: Backdrop?,
-    val budget: Budget,
+    val budget: Budget?,
     val countries: List<Country>?,
     val description: String?,
     val distributors: Distributors?,

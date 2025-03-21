@@ -8,5 +8,7 @@ data class MovieDetailScreenState(
     val comments: List<MovieComment> = emptyList(),
     val isLoadingDetails: Boolean = false,
     val isLoadingComments: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val showExpandedContent: ExpandedListContentTypes? = null,
+    val selectedComment: MovieComment? = null
 )

@@ -10,9 +10,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.absolute_cinema.data.remoute.dto.MovieDetail.Budget
 import com.example.absolute_cinema.data.remoute.dto.MovieDetail.Country
+import com.example.absolute_cinema.domain.model.common.MovieBudget
 import com.example.absolute_cinema.domain.model.common.MovieRating
 import com.example.absolute_cinema.util.UtilFunctions.avgRating
+import com.example.absolute_cinema.util.UtilFunctions.formatMoney
 import java.time.Year
 
 @Composable
@@ -22,12 +25,12 @@ fun MovieCharacteristics(
     languages: List<String>? = null,
     ageRating: Int? = null,
     duration: Int? = null,
-    rating: MovieRating? = null
+    budget: MovieBudget? = null
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(vertical = 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
@@ -61,11 +64,8 @@ fun MovieCharacteristics(
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                "Рейтинг: ${
-                    avgRating(
-                        rating?.imdb,
-                        rating?.kinopoisk
-                    )
+                "Бюджет: ${
+                        budget?.currency + budget?.value?.toInt()?.let { formatMoney(it) }
                 }",
                 style = MaterialTheme.typography.bodyMedium
             )

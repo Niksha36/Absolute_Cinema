@@ -8,6 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.absolute_cinema.domain.model.MovieComment
 import com.example.absolute_cinema.domain.use_cases.GetCommentsUseCase
 import com.example.absolute_cinema.domain.use_cases.GetMovieDetailsUseCase
 import com.example.absolute_cinema.presentation.navigation.Destination
@@ -24,7 +25,6 @@ class MovieDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     var state by mutableStateOf(MovieDetailScreenState())
-
     init {
         viewModelScope.launch {
             val id = savedStateHandle.toRoute<Destination.MovieDetails>().movieId
@@ -72,5 +72,11 @@ class MovieDetailViewModel @Inject constructor(
                 else -> Unit
             }
         }
+    }
+    fun showExpandedContent(contentType: ExpandedListContentTypes, comment: MovieComment? = null) {
+        state = state.copy(showExpandedContent = contentType, selectedComment =  comment)
+    }
+    fun hideExpandedContent() {
+        state = state.copy(showExpandedContent = null)
     }
 }

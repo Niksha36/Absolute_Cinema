@@ -26,8 +26,8 @@ fun MovieDetailDto.movieDetailMapper(): MovieDetails {
         previewImage = this.backdrop?.url,
         budget = this.budget.let {
             MovieBudget(
-                currency = it.currency,
-                value = it.value
+                currency = it?.currency,
+                value = it?.value
             )
         },
         countries = this.countries?.map {
@@ -130,7 +130,7 @@ fun MovieDetailDto.movieDetailMapper(): MovieDetails {
                 episodesCount = season.episodesCount,
                 number = season.number
             )
-        },
+        }?.sortedBy { it.number },
         sequelsAndPrequels = sequelsAndPrequels?.map { episode ->
             MovieEpisode(
                 alternativeName = episode.alternativeName,

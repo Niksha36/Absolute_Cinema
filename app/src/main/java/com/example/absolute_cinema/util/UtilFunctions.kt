@@ -3,7 +3,9 @@ package com.example.absolute_cinema.util
 import androidx.compose.ui.graphics.Color
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 import kotlin.math.round
 
 object UtilFunctions {
@@ -34,4 +36,30 @@ object UtilFunctions {
         val average = if (r1 == 0.0) r2 else if (r2 == 0.0) r1 else ((r1 + r2) / 2.0)
         return round(average * 10) / 10.0
     }
+
+    fun formatMoney(value: Int): String {
+        return when {
+            value > 1_000_000 -> "${value / 1_000_000} млн"
+            value > 1_000 -> "${value / 1_000} тыс"
+            else -> value.toString()
+        }
+    }
+
+    fun convertDateFormat(inputDate: String): String {
+        // Remove seconds and optional milliseconds
+        val cleanedDate = inputDate.replace(Regex(":[0-9]{2}(\\.[0-9]+)?"), "") // Removes :ss and .SSS if present
+
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HHX", Locale.getDefault()) // Correctly handles timezone
+        inputFormat.timeZone = TimeZone.getTimeZone("UTC") // Ensure consistent parsing
+
+        val outputFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+
+        return try {
+            val date: Date = inputFormat.parse(cleanedDate) ?: return ""
+            outputFormat.format(date)
+        } catch (e: Exception) {
+            "Invalid Date"
+        }
+    }
+
 }

@@ -68,6 +68,7 @@ fun MovieCard(
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Left,
             style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.width(180.dp)
         )
     }
 

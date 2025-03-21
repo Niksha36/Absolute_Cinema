@@ -3,23 +3,25 @@ package com.example.absolute_cinema.presentation.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.absolute_cinema.presentation.MainScreen.MainScreen
 import com.example.absolute_cinema.presentation.MainScreen.MainScreenViewModel
+import com.example.absolute_cinema.presentation.MovieDetailScreen.ExpandedListScreen
 import com.example.absolute_cinema.presentation.MovieDetailScreen.MovieDetailScreen
 import com.example.absolute_cinema.presentation.MovieDetailScreen.MovieDetailViewModel
+import kotlinx.serialization.json.Json
 
 @Composable
 fun Navigation(navController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navController,
         startDestination = Destination.Home
-    ){
+    ) {
 
         composable<Destination.Home> {
             val mainScreenViewModel: MainScreenViewModel = hiltViewModel()
@@ -33,7 +35,16 @@ fun Navigation(navController: NavHostController = rememberNavController()) {
         composable<Destination.MovieDetails> {
             val mainScreenViewModel: MovieDetailViewModel = hiltViewModel()
             val state = mainScreenViewModel.state
-            MovieDetailScreen(state)
+            MovieDetailScreen(
+                state,
+                onNavigateToMovieDetails = { id ->
+                    navController.navigate(
+                        Destination.MovieDetails(id)
+                    )
+                },
+                toggleShowExpandedContent = mainScreenViewModel::showExpandedContent,
+                goBack = mainScreenViewModel::hideExpandedContent
+            )
         }
         composable<Destination.Search> {
             //???
