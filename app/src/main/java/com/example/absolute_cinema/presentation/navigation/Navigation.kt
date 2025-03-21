@@ -9,11 +9,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.absolute_cinema.domain.model.MovieComment
 import com.example.absolute_cinema.presentation.MainScreen.MainScreen
 import com.example.absolute_cinema.presentation.MainScreen.MainScreenViewModel
 import com.example.absolute_cinema.presentation.MovieDetailScreen.ExpandedListScreen
 import com.example.absolute_cinema.presentation.MovieDetailScreen.MovieDetailScreen
 import com.example.absolute_cinema.presentation.MovieDetailScreen.MovieDetailViewModel
+import com.example.absolute_cinema.presentation.MovieDetailScreen.components.comment.FullScreenComment
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 @Composable
@@ -43,8 +46,14 @@ fun Navigation(navController: NavHostController = rememberNavController()) {
                     )
                 },
                 toggleShowExpandedContent = mainScreenViewModel::showExpandedContent,
-                goBack = mainScreenViewModel::hideExpandedContent
+                goBack = mainScreenViewModel::hideExpandedContent,
+                navigateToMovieComment = { movie -> navController.navigate(Destination.Comment(movie)) }
             )
+        }
+        composable<Destination.Comment> {backStackEntry ->
+            val commentJson = backStackEntry.toRoute<Destination.Comment>().commentJson
+            val comment = Json.decodeFromString<MovieComment>(commentJson)
+            FullScreenComment(comment = comment, {navController.popBackStack()} )
         }
         composable<Destination.Search> {
             //???

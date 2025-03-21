@@ -22,16 +22,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.absolute_cinema.data.remoute.dto.comments.Comment
 import com.example.absolute_cinema.domain.model.MovieComment
+import kotlinx.serialization.json.Json
 
 @Composable
 fun CommentCard(
     comment: MovieComment,
     modifier: Modifier,
-    toggleShowExpandedContent: (Any) -> Unit,
+    toggleShowExpandedContent: (String) -> Unit,
 
 ) {
     Card(Modifier.fillMaxHeight().clickable {
-        toggleShowExpandedContent(comment)
+        val commentJson = Json.encodeToString(comment)
+        toggleShowExpandedContent(commentJson)
     }) {
         Column(modifier.padding(horizontal = 10.dp, vertical = 10.dp)) {
             val textThemeStyles = MaterialTheme.typography

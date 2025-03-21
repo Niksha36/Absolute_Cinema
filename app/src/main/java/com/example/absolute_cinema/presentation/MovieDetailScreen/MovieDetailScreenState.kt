@@ -10,5 +10,4 @@ data class MovieDetailScreenState(
     val isLoadingComments: Boolean = false,
     val error: String? = null,
     val showExpandedContent: ExpandedListContentTypes? = null,
-    val selectedComment: MovieComment? = null
 )

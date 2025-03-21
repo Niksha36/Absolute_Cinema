@@ -73,8 +73,8 @@ class MovieDetailViewModel @Inject constructor(
             }
         }
     }
-    fun showExpandedContent(contentType: ExpandedListContentTypes, comment: MovieComment? = null) {
-        state = state.copy(showExpandedContent = contentType, selectedComment =  comment)
+    fun showExpandedContent(contentType: ExpandedListContentTypes) {
+        state = state.copy(showExpandedContent = contentType)
     }
     fun hideExpandedContent() {
         state = state.copy(showExpandedContent = null)

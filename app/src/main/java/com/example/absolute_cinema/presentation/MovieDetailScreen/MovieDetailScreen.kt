@@ -1,6 +1,5 @@
 package com.example.absolute_cinema.presentation.MovieDetailScreen
 
-import android.graphics.Movie
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -29,9 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.absolute_cinema.domain.model.MovieComment
-import com.example.absolute_cinema.presentation.MovieDetailScreen.ExpandedListContentTypes.SINGLE_COMMENT
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.BoxOfficeCard
-import com.example.absolute_cinema.presentation.MovieDetailScreen.components.comment.CommentCard
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.DetailActions
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.FactCard
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.LittleRatingBox
@@ -39,15 +36,18 @@ import com.example.absolute_cinema.presentation.MovieDetailScreen.components.Mov
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.ParallaxMoviePoster
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.PersonCard
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.RatingBox
+import com.example.absolute_cinema.presentation.MovieDetailScreen.components.comment.CommentCard
 import com.example.absolute_cinema.presentation.common.MovieCard
 import com.example.absolute_cinema.util.UtilFunctions.avgRating
 import com.example.absolute_cinema.util.UtilFunctions.ratingColor
+import kotlinx.serialization.json.Json
 
 @Composable
 fun MovieDetailScreen(
     state: MovieDetailScreenState,
     onNavigateToMovieDetails: (Int) -> Unit,
-    toggleShowExpandedContent: (ExpandedListContentTypes, comment: MovieComment?) -> Unit,
+    toggleShowExpandedContent: (ExpandedListContentTypes) -> Unit,
+    navigateToMovieComment: (String) -> Unit,
     goBack: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
@@ -65,8 +65,8 @@ fun MovieDetailScreen(
                 purpose = ExpandedListContentTypes.COMMENTS,
                 goBack = goBack,
                 listOfItems = state.comments,
-                onItemClick = {it ->
-                    toggleShowExpandedContent(SINGLE_COMMENT, it as MovieComment)
+                onItemClick = { it ->
+                    navigateToMovieComment(it)
                 }
             )
         }
@@ -76,14 +76,6 @@ fun MovieDetailScreen(
                 purpose = ExpandedListContentTypes.Facts,
                 goBack = goBack,
                 listOfItems = state.movieDetails?.facts ?: emptyList()
-            )
-        }
-
-        SINGLE_COMMENT -> {
-            ExpandedListScreen(
-                purpose = SINGLE_COMMENT,
-                goBack = goBack,
-                listOfItems = state.selectedComment?.let { listOf(it) } ?: emptyList(),
             )
         }
 
@@ -284,8 +276,7 @@ fun MovieDetailScreen(
                                         .padding(end = 10.dp)
                                         .clickable {
                                             toggleShowExpandedContent(
-                                                ExpandedListContentTypes.Facts,
-                                                null
+                                                ExpandedListContentTypes.Facts
                                             )
                                         }
                                 )
@@ -394,8 +385,7 @@ fun MovieDetailScreen(
                                         .padding(end = 10.dp)
                                         .clickable {
                                             toggleShowExpandedContent(
-                                                ExpandedListContentTypes.COMMENTS,
-                                                null
+                                                ExpandedListContentTypes.COMMENTS
                                             )
                                         }
                                 )
@@ -414,9 +404,13 @@ fun MovieDetailScreen(
                                     horizontalArrangement = spacedBy(10.dp)
                                 ) {
                                     items(comments) {
-                                        CommentCard(comment = it, Modifier.width(270.dp), { comment ->
-                                            toggleShowExpandedContent(SINGLE_COMMENT, comment as MovieComment)
-                                        })
+                                        CommentCard(
+                                            comment = it,
+                                            Modifier.width(270.dp),
+                                            { comment ->
+                                                navigateToMovieComment(comment)
+                                            }
+                                        )
                                     }
                                 }
                             }
