@@ -88,4 +88,7 @@ dependencies {
     //Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    //Youtube player
+    implementation(libs.androidyoutubeplayer)
 }

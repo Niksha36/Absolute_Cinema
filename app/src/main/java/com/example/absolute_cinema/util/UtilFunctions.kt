@@ -61,5 +61,8 @@ object UtilFunctions {
             "Invalid Date"
         }
     }
+    fun extractVideoId(url: String): String {
+        return url.substringAfterLast("/").substringBefore("?")
+    }
 
 }

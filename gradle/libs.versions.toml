@@ -1,6 +1,7 @@
 [versions]
 agp = "8.8.2"
 constraintlayoutCompose = "1.1.1"
+youtubeplayer = "12.1.1"
 kotlin = "2.1.10"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -24,6 +25,7 @@ hiltNavigationCompose = "1.2.0"
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidyoutubeplayer = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "youtubeplayer" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

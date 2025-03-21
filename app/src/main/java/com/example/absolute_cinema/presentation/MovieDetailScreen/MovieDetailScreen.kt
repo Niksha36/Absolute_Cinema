@@ -36,6 +36,7 @@ import com.example.absolute_cinema.presentation.MovieDetailScreen.components.Mov
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.ParallaxMoviePoster
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.PersonCard
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.RatingBox
+import com.example.absolute_cinema.presentation.MovieDetailScreen.components.TrailerCard
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.comment.CommentCard
 import com.example.absolute_cinema.presentation.common.MovieCard
 import com.example.absolute_cinema.util.UtilFunctions.avgRating
@@ -48,7 +49,7 @@ fun MovieDetailScreen(
     onNavigateToMovieDetails: (Int) -> Unit,
     toggleShowExpandedContent: (ExpandedListContentTypes) -> Unit,
     navigateToMovieComment: (String) -> Unit,
-    goBack: () -> Unit,
+    goBack: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val details = state.movieDetails
@@ -65,7 +66,7 @@ fun MovieDetailScreen(
                 purpose = ExpandedListContentTypes.COMMENTS,
                 goBack = goBack,
                 listOfItems = state.comments,
-                onItemClick = { it ->
+                onItemClick = {
                     navigateToMovieComment(it)
                 }
             )
@@ -151,16 +152,33 @@ fun MovieDetailScreen(
                             movieDetails.description?.let {
                                 Text(
                                     text = it,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    modifier = Modifier.padding(bottom = 10.dp)
+                                    style = MaterialTheme.typography.bodyMedium
                                 )
+                            }
+                            //Трейлеры
+                            val trailers = movieDetails.videos
+                            if (!trailers.isNullOrEmpty()) {
+                                Text(
+                                    "Трейлеры",
+                                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                                    color = Color.White,
+                                    modifier = Modifier.padding(top = 20.dp, bottom = 10.dp)
+                                )
+                                LazyRow(
+                                    Modifier.fillMaxWidth(),
+                                    horizontalArrangement = spacedBy(15.dp),
+                                ) {
+                                    items(trailers) { trailer ->
+                                        trailer.url?.let { TrailerCard(it) }
+                                    }
+                                }
                             }
                             // Рейтинг
                             Text(
                                 "Рейтинг Absolute Cinema",
                                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                                 color = Color.White,
-                                modifier = Modifier.padding(top = 10.dp)
+                                modifier = Modifier.padding(top = 20.dp)
                             )
                             val rating =
                                 avgRating(movieDetails.rating?.kinopoisk, movieDetails.rating?.imdb)
@@ -414,7 +432,6 @@ fun MovieDetailScreen(
                                     }
                                 }
                             }
-
                         }
                     }
                 }
