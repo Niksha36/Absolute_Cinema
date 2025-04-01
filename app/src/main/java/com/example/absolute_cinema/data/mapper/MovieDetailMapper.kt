@@ -2,6 +2,7 @@ package com.example.absolute_cinema.data.mapper
 
 import com.example.absolute_cinema.data.remoute.dto.MovieDetail.MovieDetailDto
 import com.example.absolute_cinema.data.remoute.dto.common.Rating
+import com.example.absolute_cinema.domain.model.MovieComment
 import com.example.absolute_cinema.domain.model.MovieDetails
 import com.example.absolute_cinema.domain.model.common.Actor
 import com.example.absolute_cinema.domain.model.common.BoxByLocation
@@ -18,7 +19,7 @@ import com.example.absolute_cinema.domain.model.common.SimilarMovie
 import com.example.absolute_cinema.domain.model.common.StreamingPlatform
 import kotlin.math.roundToInt
 
-fun MovieDetailDto.movieDetailMapper(): MovieDetails {
+fun MovieDetailDto.movieDetailMapper(comments: List<MovieComment>?): MovieDetails {
     return MovieDetails(
         id = this.id,
         ageRating = this.ageRating,
@@ -103,7 +104,8 @@ fun MovieDetailDto.movieDetailMapper(): MovieDetails {
         videos = videos?.trailers?.map { trailer ->
             MovieTrailer(
                 site = trailer.site,
-                url = trailer.url
+                url = trailer.url,
+                name = trailer.name
             )
         },
         similarMovies = similarMovies?.map { movie ->
@@ -153,6 +155,7 @@ fun MovieDetailDto.movieDetailMapper(): MovieDetails {
             ""
         },
         year = year,
+        comments = if (!comments.isNullOrEmpty()) comments else emptyList()
     )
 }
 

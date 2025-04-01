@@ -44,4 +44,5 @@ data class MovieDetails(
     //Для сериалов
     val seasonsInfo: List<SeasonInfo>?,
     val sequelsAndPrequels: List<MovieEpisode>?,
+    val comments: List<MovieComment>,
 )

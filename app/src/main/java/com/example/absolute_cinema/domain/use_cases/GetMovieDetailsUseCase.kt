@@ -11,9 +11,9 @@ class GetMovieDetailsUseCase @Inject constructor(
     val repository: MovieRepository
 ) {
 
-    suspend operator fun invoke(id: Int): Resource<MovieDetails> =
+    suspend operator fun invoke(id: Int, page: Int, limit: Int): Resource<MovieDetails> =
         try {
-            val details = repository.getMovieById(id)
+            val details = repository.getMovieById(id, page, limit)
             Resource.Success(details)
         } catch (e: HttpException) {
             Resource.Error(e.localizedMessage ?: "An unexpected error occured")

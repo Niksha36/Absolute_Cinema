@@ -5,9 +5,8 @@ import com.example.absolute_cinema.domain.model.MovieDetails
 
 data class MovieDetailScreenState(
     val movieDetails: MovieDetails? = null,
-    val comments: List<MovieComment> = emptyList(),
     val isLoadingDetails: Boolean = false,
-    val isLoadingComments: Boolean = false,
     val error: String? = null,
     val showExpandedContent: ExpandedListContentTypes? = null,
+    val isMovieSaved: Boolean = false
 )

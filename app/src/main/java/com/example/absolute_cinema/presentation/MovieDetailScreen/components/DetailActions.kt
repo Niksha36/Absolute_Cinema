@@ -1,5 +1,6 @@
 package com.example.absolute_cinema.presentation.MovieDetailScreen.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,12 +15,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.absolute_cinema.R
+import com.example.absolute_cinema.presentation.MovieDetailScreen.MovieDetailScreenState
 
 @Composable
-fun DetailActions() {
+fun DetailActions(
+    saveAction: () -> Unit,
+    deleteAction: () -> Unit,
+    state: MovieDetailScreenState
+) {
+    val saveIconColor = if(state.isMovieSaved) Color.Companion.Red else Color.White
     Row(
         horizontalArrangement = Arrangement.spacedBy(20.dp),
     ) {
@@ -27,9 +35,9 @@ fun DetailActions() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.clickable {
-                TODO()
+                if (state.isMovieSaved) deleteAction() else saveAction()
             }) {
-            Icon(Icons.Filled.Favorite, contentDescription = "Star Icon")
+            Icon(Icons.Filled.Favorite, contentDescription = "Star Icon", tint = saveIconColor)
             Text(stringResource(R.string.will_watch_later_action))
         }
         Column(

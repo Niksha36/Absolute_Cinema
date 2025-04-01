@@ -14,4 +14,11 @@
     <string name="ExpandedContTypeFacts">Удивительные факты</string>
     <string name="ExpandedContTypeComments">Комментарии</string>
     <string name="ExpandedContTypeSingleComment">ОТЗЫВ</string>
+    <string name="favorite_sort_type_year">Год</string>
+    <string name="favorite_sort_type_rating">Рейтинг</string>
+    <string name="favorite_sort_type_name">Название</string>
+    <string name="favorite_sort_type_adding_date">Дата добавления</string>
+    <string name="favorite_screen_sorting_text">Сортировка</string>
+    <string name="ASC_string">Возрастание</string>
+    <string name="DESC_string">Убывание</string>
 </resources>

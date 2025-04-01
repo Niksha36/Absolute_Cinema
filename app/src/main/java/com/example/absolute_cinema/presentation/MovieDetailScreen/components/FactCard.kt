@@ -1,5 +1,6 @@
 package com.example.absolute_cinema.presentation.MovieDetailScreen.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
 import com.example.absolute_cinema.domain.model.common.MovieFact
+import com.example.compose.Absolute_CinemaTheme
 
 @Composable
 fun FactCard(

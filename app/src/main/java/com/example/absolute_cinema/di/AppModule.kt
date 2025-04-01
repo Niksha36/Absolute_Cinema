@@ -1,5 +1,9 @@
 package com.example.absolute_cinema.di
 
+import android.app.Application
+import androidx.room.Room
+import com.example.absolute_cinema.data.local.dao.MovieDatabase
+import com.example.absolute_cinema.data.local.dao.MoviesDao
 import com.example.absolute_cinema.data.remoute.MoviesApi
 import com.example.absolute_cinema.data.repository.MovieRepositoryImpl
 import com.example.absolute_cinema.domain.repository.MovieRepository
@@ -45,11 +49,22 @@ object AppModule {
             .create(MoviesApi::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideMovieDatabase(app: Application): MovieDatabase {
+        return Room.databaseBuilder(
+            app,
+            MovieDatabase::class.java,
+            "movie.db"
+        ).build()
+    }
+
     @Singleton
     @Provides
     fun provideMovieRepositoryImpl(
-        api: MoviesApi
+        api: MoviesApi,
+        db: MovieDatabase,
     ): MovieRepository {
-        return MovieRepositoryImpl(api)
+        return MovieRepositoryImpl(api, db)
     }
 }

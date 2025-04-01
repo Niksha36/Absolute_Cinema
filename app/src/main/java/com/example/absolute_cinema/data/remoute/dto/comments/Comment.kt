@@ -7,7 +7,7 @@ data class Comment(
     val authorId: Int? = null,
     val createdAt: String? = null,
     val date: String? = null,
-    val id: Int? = null,
+    val id: Int,
     val movieId: Int? = null,
     val review: String? = null,
     val reviewDislikes: Int? = null,
@@ -15,5 +15,5 @@ data class Comment(
     val title: String? = null,
     val type: String? = null,
     val updatedAt: String? = null,
-    val userRating: Int? = null
+    val userRating: Double? = null
 )

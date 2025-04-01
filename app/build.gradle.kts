@@ -84,11 +84,9 @@ dependencies {
     //Room
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
+    implementation("androidx.room:room-ktx:2.6.1")
 
     //Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
-
-    //Youtube player
-    implementation(libs.androidyoutubeplayer)
 }

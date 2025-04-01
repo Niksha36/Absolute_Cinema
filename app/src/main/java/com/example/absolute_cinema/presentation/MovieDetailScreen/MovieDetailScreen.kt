@@ -1,7 +1,6 @@
 package com.example.absolute_cinema.presentation.MovieDetailScreen
 
 import android.util.Log
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +28,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.absolute_cinema.domain.model.MovieComment
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.BoxOfficeCard
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.DetailActions
 import com.example.absolute_cinema.presentation.MovieDetailScreen.components.FactCard
@@ -41,51 +41,59 @@ import com.example.absolute_cinema.presentation.MovieDetailScreen.components.com
 import com.example.absolute_cinema.presentation.common.MovieCard
 import com.example.absolute_cinema.util.UtilFunctions.avgRating
 import com.example.absolute_cinema.util.UtilFunctions.ratingColor
-import kotlinx.serialization.json.Json
 
 @Composable
 fun MovieDetailScreen(
     state: MovieDetailScreenState,
     onNavigateToMovieDetails: (Int) -> Unit,
-    toggleShowExpandedContent: (ExpandedListContentTypes) -> Unit,
     navigateToMovieComment: (String) -> Unit,
-    goBack: () -> Unit
+    onEvent: (MovieDetailsEvent) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val details = state.movieDetails
     if (state.error != null) {
         Log.e("MovieDetailScreen", state.error)
     }
-    BackHandler {
-        goBack()
-    }
+//    BackHandler {
+//        onEvent(MovieDetailsEvent.hideExpandedContent)
+//    }
     when (state.showExpandedContent) {
 
         ExpandedListContentTypes.COMMENTS -> {
-            ExpandedListScreen(
-                purpose = ExpandedListContentTypes.COMMENTS,
-                goBack = goBack,
-                listOfItems = state.comments,
-                onItemClick = {
-                    navigateToMovieComment(it)
-                }
-            )
+            details?.let {
+                ExpandedListScreen(
+                    purpose = ExpandedListContentTypes.COMMENTS,
+                    goBack = { onEvent(MovieDetailsEvent.hideExpandedContent) },
+                    listOfItems = it.comments,
+                    onItemClick = {
+                        navigateToMovieComment(it)
+                    }
+                )
+            }
         }
 
         ExpandedListContentTypes.Facts -> {
             ExpandedListScreen(
                 purpose = ExpandedListContentTypes.Facts,
-                goBack = goBack,
+                goBack = { onEvent(MovieDetailsEvent.hideExpandedContent) },
                 listOfItems = state.movieDetails?.facts ?: emptyList()
             )
         }
 
         else -> {
+            Box(Modifier.fillMaxSize()) {
+                if(state.isLoadingDetails){
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+            }
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .verticalScroll(scrollState)
             ) {
+
                 details?.let { movieDetails ->
                     val imageUrl =
                         if (!movieDetails.previewImage.isNullOrEmpty()) movieDetails.previewImage else movieDetails.poster
@@ -128,7 +136,26 @@ fun MovieDetailScreen(
                                     .fillMaxWidth()
                                     .padding(vertical = 18.dp),
                                 contentAlignment = Alignment.Center
-                            ) { DetailActions() }
+                            ) {
+                                DetailActions(
+                                    saveAction = {
+                                        onEvent(
+                                            MovieDetailsEvent.saveMovie(
+                                                movieDetails,
+                                                details.comments
+                                            )
+                                        )
+                                    },
+                                    deleteAction = {
+                                        onEvent(
+                                            MovieDetailsEvent.deleteMovie(
+                                                movieDetails.id
+                                            )
+                                        )
+                                    },
+                                    state = state
+                                )
+                            }
 
                             // Характеристики
                             MovieCharacteristics(
@@ -293,8 +320,10 @@ fun MovieDetailScreen(
                                     modifier = Modifier
                                         .padding(end = 10.dp)
                                         .clickable {
-                                            toggleShowExpandedContent(
-                                                ExpandedListContentTypes.Facts
+                                            onEvent(
+                                                MovieDetailsEvent.showExpandedContent(
+                                                    ExpandedListContentTypes.Facts
+                                                )
                                             )
                                         }
                                 )
@@ -382,7 +411,7 @@ fun MovieDetailScreen(
                                 }
                             }
                             //Отзывы
-                            val comments = state.comments
+                            val comments = details.comments
                             Row(
                                 modifier = Modifier
                                     .padding(top = 20.dp, bottom = 10.dp)
@@ -402,8 +431,10 @@ fun MovieDetailScreen(
                                     modifier = Modifier
                                         .padding(end = 10.dp)
                                         .clickable {
-                                            toggleShowExpandedContent(
-                                                ExpandedListContentTypes.COMMENTS
+                                            onEvent(
+                                                MovieDetailsEvent.showExpandedContent(
+                                                    ExpandedListContentTypes.COMMENTS
+                                                )
                                             )
                                         }
                                 )

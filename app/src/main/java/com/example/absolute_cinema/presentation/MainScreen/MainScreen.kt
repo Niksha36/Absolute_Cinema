@@ -78,7 +78,7 @@ fun MainScreen(
                     MovieCard(
                         poster = movie.posterImg,
                         name = movie.name ?: "",
-                        rating = UtilFunctions.avgRating(movie.imdb, movie.kp),
+                        rating = movie.absoluteCinemaRating,
                         onClick = { onNavigation(movie.movieId) }
                     )
                 }
