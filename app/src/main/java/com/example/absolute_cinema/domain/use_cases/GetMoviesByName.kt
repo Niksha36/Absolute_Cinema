@@ -4,24 +4,25 @@ import com.example.absolute_cinema.domain.model.MoviePoster
 import com.example.absolute_cinema.domain.repository.MovieRepository
 import com.example.absolute_cinema.util.Resource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-class GetTopMoviesUseCase @Inject constructor(
+
+class GetMoviesByName @Inject constructor(
     val repository: MovieRepository
 ) {
 
-    operator fun invoke(page: Int, limit: Int): Flow<Resource<List<MoviePoster>>> = flow {
+    operator fun invoke(name: String, limit: Int, page: Int): Flow<Resource<List<MoviePoster>>> = flow {
         emit(Resource.Loading())
         try {
-            val response = repository.getTopMovies(
+            val response = repository.getMoviesByName(
                 page = page,
-                limit = limit
+                limit = limit,
+                name = name,
             )
-            emit(Resource.Success(data = response))
+            emit(Resource.Success(response))
         } catch (e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occured"))
         } catch (e: IOException) {
@@ -30,5 +31,4 @@ class GetTopMoviesUseCase @Inject constructor(
             emit(Resource.Error(e.message.toString()))
         }
     }
-
 }

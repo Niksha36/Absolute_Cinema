@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.Flow
 interface MoviesDao {
 
     @Query("SELECT * FROM MoviePosterEntity")
-    suspend fun getMoviePosters(): List<MoviePosterEntity>
+    fun getMoviePosters(): Flow<List<MoviePosterEntity>>
 
     @Transaction
     @Query("SELECT * FROM movies WHERE id = :movieId")

@@ -18,4 +18,13 @@ sealed class Destination {
     data object Favorite : Destination()
     @Serializable
     data class Comment(val commentJson: String) : Destination()
+    @Serializable
+    data class SearchSelection(val purpose: String) : Destination()
+    @Serializable
+    data object SearchingScreen : Destination()
+    @Serializable
+    data object FilterScreen : Destination()
+
+    @Serializable
+    data object SearchScreens : Destination()
 }

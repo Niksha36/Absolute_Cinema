@@ -54,9 +54,7 @@ fun MovieDetailScreen(
     if (state.error != null) {
         Log.e("MovieDetailScreen", state.error)
     }
-//    BackHandler {
-//        onEvent(MovieDetailsEvent.hideExpandedContent)
-//    }
+
     when (state.showExpandedContent) {
 
         ExpandedListContentTypes.COMMENTS -> {
@@ -196,7 +194,7 @@ fun MovieDetailScreen(
                                     horizontalArrangement = spacedBy(15.dp),
                                 ) {
                                     items(trailers) { trailer ->
-                                        trailer.url?.let { TrailerCard(it) }
+                                        trailer.url?.let { TrailerCard(it, trailer.name) }
                                     }
                                 }
                             }

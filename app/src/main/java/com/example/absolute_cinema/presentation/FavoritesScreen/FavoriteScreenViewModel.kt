@@ -1,8 +1,9 @@
 package com.example.absolute_cinema.presentation.FavoritesScreen
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.absolute_cinema.domain.model.MoviePoster
@@ -12,10 +13,7 @@ import com.example.absolute_cinema.util.Resource
 import com.example.absolute_cinema.util.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,30 +25,31 @@ class FavoriteScreenViewModel @Inject constructor(
 
     private val _sortType =
         MutableStateFlow<FavoriteSortTypes>(FavoriteSortTypes.ByDateAdded(SortOrder.DESCENDING))
-    private val _state = MutableStateFlow(FavoriteScreenState())
-    val state = combine(
-        crudUseCase.getMoviePosters(),
-        _sortType,
-        _state
-    ) { resource, sortType, prevState ->
-        when (resource) {
-            is Resource.Loading -> prevState.copy(isLoading = true)
-            is Resource.Success -> {
-                val sortedMovies = sortMovies(resource.data ?: emptyList(), sortType)
-                prevState.copy(isLoading = false, movies = sortedMovies)
-            }
-            is Resource.Error -> prevState.copy(
-                isLoading = false,
-                movies = emptyList(),
-                error = resource.message.orEmpty()
-            )
-        }
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        FavoriteScreenState()
-    )
+    var state by mutableStateOf(FavoriteScreenState())
 
+    init{
+        viewModelScope.launch {
+            combine(
+                crudUseCase.getMoviePosters(),
+                _sortType
+            ) { resource, sortType ->
+                when (resource) {
+                    is Resource.Loading -> state.copy(isLoading = true)
+                    is Resource.Success -> {
+                        val sortedMovies = sortMovies(resource.data ?: emptyList(), sortType)
+                        state.copy(isLoading = false, movies = sortedMovies)
+                    }
+                    is Resource.Error -> state.copy(
+                        isLoading = false,
+                        movies = emptyList(),
+                        error = resource.message.orEmpty()
+                    )
+                }
+            }.collect { newState ->
+                state = newState
+            }
+        }
+    }
 
     private fun sortMovies(
         movies: List<MoviePoster>,
@@ -81,50 +80,42 @@ class FavoriteScreenViewModel @Inject constructor(
 
 
     private fun changeSortType() {
-        _sortType.value = _state.value.dialogSortType
+        _sortType.value = this.state.dialogSortType
         toggleDialog()
     }
     private fun toggleOrderInDialog() {
-        _state.update { state ->
-            val newOrder = if (state.dialogSortOrder == SortOrder.DESCENDING) {
-                SortOrder.ASCENDING
-            } else {
-                SortOrder.DESCENDING
-            }
-            state.copy(
-                dialogSortOrder = newOrder,
-                dialogSortType = when (state.dialogSortType) {
-                    is FavoriteSortTypes.ByYear -> FavoriteSortTypes.ByYear(newOrder)
-                    is FavoriteSortTypes.ByRating -> FavoriteSortTypes.ByRating(newOrder)
-                    is FavoriteSortTypes.ByName -> FavoriteSortTypes.ByName(newOrder)
-                    is FavoriteSortTypes.ByDateAdded -> FavoriteSortTypes.ByDateAdded(newOrder)
-                }
-            )
-
+        val newOrder = if (state.dialogSortOrder == SortOrder.DESCENDING) {
+            SortOrder.ASCENDING
+        } else {
+            SortOrder.DESCENDING
         }
-        Log.d("TAG", "toggleOrderInDialog: ${_state.value.dialogSortOrder}")
+        state = state.copy(
+            dialogSortOrder = newOrder,
+            dialogSortType = when (state.dialogSortType) {
+                is FavoriteSortTypes.ByYear -> FavoriteSortTypes.ByYear(newOrder)
+                is FavoriteSortTypes.ByRating -> FavoriteSortTypes.ByRating(newOrder)
+                is FavoriteSortTypes.ByName -> FavoriteSortTypes.ByName(newOrder)
+                is FavoriteSortTypes.ByDateAdded -> FavoriteSortTypes.ByDateAdded(newOrder)
+            }
+        )
     }
     private fun changeSortTypeInDialog(newSortType: FavoriteSortTypes) {
-        _state.update { state ->
-            state.copy(
+            state = state.copy(
                 dialogSortType = newSortType
             )
-        }
     }
     private fun cancelChangingSortType() {
-        _state.update { state ->
-            state.copy(
+
+            state = state.copy(
                 dialogSortType = state.sortType,
                 dialogSortOrder = state.sortType.order
             )
-        }
+
     }
     private fun toggleDialog() {
-        _state.update { state ->
-            state.copy(
+            state = state.copy(
                 showDialog = !state.showDialog
             )
-        }
     }
 
 

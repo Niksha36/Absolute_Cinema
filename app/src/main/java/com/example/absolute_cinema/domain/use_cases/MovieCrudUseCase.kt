@@ -19,8 +19,10 @@ class MovieCrudUseCase @Inject constructor(
     fun getMoviePosters(): Flow<Resource<List<MoviePoster>>> = flow{
         try {
             emit(Resource.Loading())
-            val response = repository.getSavedPosters()
-            emit(Resource.Success(data = response))
+            repository.getSavedPosters().collect {
+                emit(Resource.Success(data = it))
+            }
+
         } catch (e: Exception) {
             emit(Resource.Error(e.message.toString()))
         }

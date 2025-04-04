@@ -21,4 +21,44 @@
     <string name="favorite_screen_sorting_text">Сортировка</string>
     <string name="ASC_string">Возрастание</string>
     <string name="DESC_string">Убывание</string>
+
+    <string name="genre_anime">аниме</string>
+    <string name="genre_biografiya">биография</string>
+    <string name="genre_boevik">боевик</string>
+    <string name="genre_vestern">вестерн</string>
+    <string name="genre_voennyy">военный</string>
+    <string name="genre_detektiv">детектив</string>
+    <string name="genre_detskiy">детский</string>
+    <string name="genre_dlya_vzroslyh">для взрослых</string>
+    <string name="genre_dokumentalnyy">документальный</string>
+    <string name="genre_drama">драма</string>
+    <string name="genre_igra">игра</string>
+    <string name="genre_istoriya">история</string>
+    <string name="genre_komediya">комедия</string>
+    <string name="genre_koncert">концерт</string>
+    <string name="genre_korotkometrazhka">короткометражка</string>
+    <string name="genre_kriminal">криминал</string>
+    <string name="genre_melodrama">мелодрама</string>
+    <string name="genre_muzyka">музыка</string>
+    <string name="genre_multfilm">мультфильм</string>
+    <string name="genre_myuzikl">мюзикл</string>
+    <string name="genre_novosti">новости</string>
+    <string name="genre_priklyucheniya">приключения</string>
+    <string name="genre_realnoe_TV">реальное ТВ</string>
+    <string name="genre_semeynyy">семейный</string>
+    <string name="genre_sport">спорт</string>
+    <string name="genre_tok_shou">ток-шоу</string>
+    <string name="genre_triller">триллер</string>
+    <string name="genre_uzhasy">ужасы</string>
+    <string name="genre_fantastika">фантастика</string>
+    <string name="genre_film_nuar">фильм-нуар</string>
+    <string name="genre_fentezi">фэнтези</string>
+    <string name="genre_ceremoniya">церемония</string>
+
+    <string name="type_filter_all">Все</string>
+    <string name="type_filter_movies">Фильмы</string>
+    <string name="type_filter_series">Сериалы</string>
+    <string name="sort_by_popularity">Популярности</string>
+    <string name="sort_by_rating">Рейтингу</string>
+    <string name="sort_by_date">Дате</string>
 </resources>

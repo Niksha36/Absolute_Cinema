@@ -8,5 +8,5 @@ data class MainScreenState(
     val sortType: SortTypes = SortTypes.TOP_MOVIES,
     val page: Int = 1,
     val isLoading: Boolean = false,
-    val error: String = ""
+    val error: String = "",
 )

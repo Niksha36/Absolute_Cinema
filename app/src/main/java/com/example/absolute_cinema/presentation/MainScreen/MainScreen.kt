@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.absolute_cinema.presentation.common.ErrorDialog
 import com.example.absolute_cinema.presentation.common.MovieCard
+import com.example.absolute_cinema.presentation.common.MoviesGrid
 import com.example.absolute_cinema.util.SortTypes
 import com.example.absolute_cinema.util.UtilFunctions
 
@@ -38,8 +39,8 @@ fun MainScreen(
     onEvent: (MainScreenEvent) -> Unit,
     onNavigation: (Int) -> Unit
 ) {
-    var selectedTab by remember { mutableIntStateOf(0) }
     val tabItems = SortTypes.entries
+    var selectedTab  = tabItems.indexOf(state.sortType)
     Scaffold(
         topBar = {
             TabRow(
@@ -63,26 +64,8 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(17.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                contentPadding = PaddingValues(
-                    start = 3.dp,
-                    top = 8.dp,
-                    end = 3.dp,
-                    bottom = 8.dp
-                ),
-            ) {
-                items(state.movies) { movie ->
-                    MovieCard(
-                        poster = movie.posterImg,
-                        name = movie.name ?: "",
-                        rating = movie.absoluteCinemaRating,
-                        onClick = { onNavigation(movie.movieId) }
-                    )
-                }
-            }
+            MoviesGrid(state.movies) { movieId -> onNavigation(movieId)}
+
             if(state.isLoading){
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)

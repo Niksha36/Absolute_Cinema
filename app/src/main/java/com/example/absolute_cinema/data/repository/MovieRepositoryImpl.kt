@@ -14,6 +14,7 @@ import com.example.absolute_cinema.domain.model.MoviePoster
 import com.example.absolute_cinema.domain.repository.MovieRepository
 import com.example.absolute_cinema.util.Constants.API_KEY
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
@@ -22,14 +23,16 @@ class MovieRepositoryImpl @Inject constructor(
 ) : MovieRepository {
     private val dao = db.dao
 
-    override suspend fun getTopMovies(
+    override suspend fun getMoviesBySelection(
         page: Int,
-        limit: Int
+        limit: Int,
+        selectionName: String
     ): List<MoviePoster> {
-        return api.getTopMovies(
+        return api.getMoviesBySelection(
             apiKey = API_KEY,
             page = page,
-            limit = limit
+            limit = limit,
+            lists = selectionName
         ).toMoviePosterList()
     }
 
@@ -81,16 +84,48 @@ class MovieRepositoryImpl @Inject constructor(
         dao.deleteMovie(movieId)
     }
 
-    override suspend fun getSavedPosters(): List<MoviePoster> {
-        return dao.getMoviePosters().map { it.toMoviePoster() }
+    override fun getSavedPosters(): Flow<List<MoviePoster>> {
+        return dao.getMoviePosters().map { list ->
+            list.map { it.toMoviePoster() }
+        }
     }
 
     override suspend fun getMovieDetails(id: Int): MovieDetails? {
         return dao.getMovieDetails(id)?.entityToMovieDetails()
     }
 
+    override suspend fun getMoviesByName(name: String, limit: Int, page: Int): List<MoviePoster> {
+        return api.getMoviesByName(
+            apiKey = API_KEY,
+            page = page,
+            limit = limit,
+            query = name
+        ).toMoviePosterList()
+    }
+
     override fun isMovieSaved(id: Int): Flow<Boolean> {
         return dao.isMovieSaved(id)
+    }
+
+    override suspend fun getMoviesByFilter(
+        page: Int,
+        limit: Int,
+        sortField: String,
+        genres: List<String>?,
+        year: String?,
+        rating: String,
+        isSeries: Boolean?
+    ): List<MoviePoster> {
+        return api.getMoviesByFilter(
+            apiKey = API_KEY,
+            page = page,
+            limit = limit,
+            sortField = sortField,
+            genres = genres,
+            year = year,
+            rating = rating,
+            isSeries = isSeries
+        ).toMoviePosterList()
     }
 
 }

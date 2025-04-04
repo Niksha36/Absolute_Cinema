@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.absolute_cinema.domain.use_cases.GetForKidsUseCase
 import com.example.absolute_cinema.domain.use_cases.GetLatestMoviesUseCase
-import com.example.absolute_cinema.domain.use_cases.GetTopMoviesUseCase
+import com.example.absolute_cinema.domain.use_cases.GetMoviesBySelectionUseCase
 import com.example.absolute_cinema.util.Resource
 import com.example.absolute_cinema.util.SortTypes
 import com.example.absolute_cinema.util.UtilFunctions.getYearInterval
@@ -21,7 +21,7 @@ import javax.inject.Inject
 //page and data ???
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
-    private val getTopMoviesUseCase: GetTopMoviesUseCase,
+    private val getMoviesBySelectionUseCase: GetMoviesBySelectionUseCase,
     private val getForKidsUseCase: GetForKidsUseCase,
     private val getLatestMoviesUseCase: GetLatestMoviesUseCase
 ) : ViewModel() {
@@ -35,9 +35,10 @@ class MainScreenViewModel @Inject constructor(
         sortType to page
     }.flatMapLatest { (sortType, page) ->
         when (sortType) {
-            SortTypes.TOP_MOVIES -> getTopMoviesUseCase(
+            SortTypes.TOP_MOVIES -> getMoviesBySelectionUseCase(
                 page = page,
-                limit = limit
+                limit = limit,
+                selection = "top500",
             )
 
             SortTypes.LATEST_MOVIES -> {

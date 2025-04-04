@@ -12,6 +12,6 @@ data class Doc(
     val genres: List<Genre> = emptyList(),
     val name: String? = null,
     val alternativeName: String? = null,
-    val poster: Poster,
+    val poster: Poster?,
     val rating: Rating
 )

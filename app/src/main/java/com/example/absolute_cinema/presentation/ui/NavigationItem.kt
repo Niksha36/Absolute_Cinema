@@ -1,4 +1,4 @@
-package com.example.absolute_cinema.util
+package com.example.absolute_cinema.presentation.ui
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.absolute_cinema.presentation.navigation.Destination

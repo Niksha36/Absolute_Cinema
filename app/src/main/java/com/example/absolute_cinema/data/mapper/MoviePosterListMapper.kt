@@ -10,7 +10,7 @@ fun TopMoviesDto.toMoviePosterList(): List<MoviePoster> {
             alternativeName = it.alternativeName,
             genres = it.genres.map { genre -> genre.name },
             name = it.name,
-            posterImg = it.poster.url,
+            posterImg = it.poster?.url,
             filmCritics = it.rating.filmCritics,
             imdb = it.rating.imdb,
             kp = it.rating.kp,

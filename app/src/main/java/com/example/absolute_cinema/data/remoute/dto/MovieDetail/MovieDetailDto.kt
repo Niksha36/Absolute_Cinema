@@ -22,7 +22,7 @@ data class MovieDetailDto(
     val genres: List<Genre>?,
     val id: Int,
     val isSeries: Boolean,
-    val isTmdbChecked: Boolean,
+    val isTmdbChecked: Boolean?,
     val lists: List<String>?,
     val movieLength: Double?,
     val name: String?,

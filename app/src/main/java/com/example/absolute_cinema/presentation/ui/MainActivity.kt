@@ -33,7 +33,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.absolute_cinema.R
 import com.example.absolute_cinema.presentation.navigation.Destination
 import com.example.absolute_cinema.presentation.navigation.Navigation
-import com.example.absolute_cinema.util.NavigationItem
 import com.example.compose.Absolute_CinemaTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -82,7 +81,7 @@ fun AppScreen() {
         NavigationItem(
             stringResource(R.string.bottomNavItemSearch),
             Icons.Filled.Search,
-            Destination.Search
+            Destination.SearchScreens
         ),
         NavigationItem(
             stringResource(R.string.bottomNavItemFavorite),

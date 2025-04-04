@@ -1,5 +1,6 @@
 package com.example.absolute_cinema.presentation.MovieDetailScreen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,7 +34,9 @@ fun ExpandedListScreen(
     listOfItems: List<Any>,
     onItemClick: (String) -> Unit = {}
 ) {
-
+    BackHandler {
+        goBack()
+    }
     Scaffold(
         topBar = {
             TopAppBar(

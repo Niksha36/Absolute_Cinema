@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.example.absolute_cinema.R
 import com.example.absolute_cinema.presentation.FavoritesScreen.components.SortingDialog
 import com.example.absolute_cinema.presentation.common.MovieCard
+import com.example.absolute_cinema.presentation.common.MoviesGrid
 import com.example.absolute_cinema.util.FavoriteSortTypes
 import com.example.compose.outlineDark
 
@@ -46,10 +47,21 @@ fun FavoriteScreen(
             .fillMaxSize()
     ) {
         Column() {
-            Row(horizontalArrangement = Arrangement.SpaceBetween,verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().clickable {
-                onEvent(FavoriteScreenEvent.toggleDialog)
-            }.padding(8.dp)) {
-                Text(stringResource(R.string.favorite_screen_sorting_text), style = MaterialTheme.typography.titleSmall, color = Color.White)
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onEvent(FavoriteScreenEvent.toggleDialog)
+                    }
+                    .padding(8.dp)
+            ) {
+                Text(
+                    stringResource(R.string.favorite_screen_sorting_text),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Color.White
+                )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = stringResource(state.sortType.nameResId),
@@ -65,25 +77,8 @@ fun FavoriteScreen(
                     )
                 }
             }
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(17.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                contentPadding = PaddingValues(
-                    start = 3.dp,
-                    top = 8.dp,
-                    end = 3.dp,
-                    bottom = 8.dp
-                ),
-            ) {
-                items(state.movies) { movie ->
-                    MovieCard(
-                        poster = movie.posterImg,
-                        name = movie.name ?: "",
-                        rating = movie.absoluteCinemaRating,
-                        onClick = { onNavigation(movie.movieId) }
-                    )
-                }
+            MoviesGrid(state.movies) { movieId ->
+                onNavigation(movieId)
             }
         }
         if (state.isLoading) {
