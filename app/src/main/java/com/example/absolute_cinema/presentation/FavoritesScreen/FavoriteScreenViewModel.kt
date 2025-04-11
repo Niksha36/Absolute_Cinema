@@ -26,6 +26,7 @@ class FavoriteScreenViewModel @Inject constructor(
     private val _sortType =
         MutableStateFlow<FavoriteSortTypes>(FavoriteSortTypes.ByDateAdded(SortOrder.DESCENDING))
     var state by mutableStateOf(FavoriteScreenState())
+        private set
 
     init{
         viewModelScope.launch {
@@ -55,6 +56,9 @@ class FavoriteScreenViewModel @Inject constructor(
         movies: List<MoviePoster>,
         sortType: FavoriteSortTypes
     ): List<MoviePoster> {
+        state = state.copy(
+            sortType = sortType
+        )
         return when (sortType) {
             is FavoriteSortTypes.ByYear -> sortByOrder(movies, sortType.order) { it.year ?: 0 }
             is FavoriteSortTypes.ByRating -> sortByOrder(movies, sortType.order) { it.absoluteCinemaRating ?: 0.0 }

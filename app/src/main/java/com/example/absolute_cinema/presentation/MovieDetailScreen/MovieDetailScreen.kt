@@ -112,7 +112,6 @@ fun MovieDetailScreen(
                                 horizontalArrangement = spacedBy(10.dp),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(start = 5.dp)
                             ) {
                                 val genres = movieDetails.genres ?: emptyList()
                                 items(genres) {
@@ -151,7 +150,8 @@ fun MovieDetailScreen(
                                             )
                                         )
                                     },
-                                    state = state
+                                    state = state,
+                                    shareLink = if (!movieDetails.isSeries) "https://www.kinopoisk.ru/film/${movieDetails.id}/" else "https://www.kinopoisk.ru/series/${movieDetails.id}/",
                                 )
                             }
 
@@ -299,50 +299,52 @@ fun MovieDetailScreen(
                             }
 
                             // Факты
-                            Row(
-                                modifier = Modifier
-                                    .padding(top = 20.dp, bottom = 10.dp)
-                                    .fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    "Удивительные факты",
-                                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                                    color = Color.White,
-                                )
-                                Text(
-                                    "Всё",
-                                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                                    color = MaterialTheme.colorScheme.tertiaryContainer,
+                            if(!movieDetails.facts.isNullOrEmpty()){
+                                Row(
                                     modifier = Modifier
-                                        .padding(end = 10.dp)
-                                        .clickable {
-                                            onEvent(
-                                                MovieDetailsEvent.showExpandedContent(
-                                                    ExpandedListContentTypes.Facts
+                                        .padding(top = 20.dp, bottom = 10.dp)
+                                        .fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        "Удивительные факты",
+                                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                                        color = Color.White,
+                                    )
+                                    Text(
+                                        "Всё",
+                                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                        color = MaterialTheme.colorScheme.tertiaryContainer,
+                                        modifier = Modifier
+                                            .padding(end = 10.dp)
+                                            .clickable {
+                                                onEvent(
+                                                    MovieDetailsEvent.showExpandedContent(
+                                                        ExpandedListContentTypes.Facts
+                                                    )
                                                 )
-                                            )
-                                        }
-                                )
-                            }
-
-                            LazyRow(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = spacedBy(15.dp),
-                            ) {
-                                movieDetails.facts?.let { facts ->
-                                    items(facts) { fact ->
-                                        FactCard(
-                                            fact = fact,
-                                            modifier = Modifier
-                                                .width(200.dp)
-                                                .height(150.dp)
-                                                .weight(1f)
-                                        )
-                                    }
+                                            }
+                                    )
                                 }
 
+                                LazyRow(
+                                    Modifier.fillMaxWidth(),
+                                    horizontalArrangement = spacedBy(15.dp),
+                                ) {
+                                    movieDetails.facts.let { facts ->
+                                        items(facts) { fact ->
+                                            FactCard(
+                                                fact = fact,
+                                                modifier = Modifier
+                                                    .width(200.dp)
+                                                    .height(150.dp)
+                                                    .weight(1f)
+                                            )
+                                        }
+                                    }
+
+                                }
                             }
                             //Сиквелы и приквелы
                             if (!movieDetails.sequelsAndPrequels.isNullOrEmpty()) {
@@ -382,7 +384,7 @@ fun MovieDetailScreen(
                                         color = Color.White,
                                         modifier = Modifier.padding(top = 20.dp, bottom = 10.dp)
                                     )
-                                    LazyRow {
+                                    LazyRow(horizontalArrangement = spacedBy(10.dp)) {
                                         items(seasons.chunked(3)) { chunkedSeasons ->
                                             Column {
                                                 chunkedSeasons.forEach { season ->

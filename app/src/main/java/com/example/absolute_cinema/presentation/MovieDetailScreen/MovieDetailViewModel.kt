@@ -25,7 +25,7 @@ class MovieDetailViewModel @Inject constructor(
     private val movieCrudUseCase: MovieCrudUseCase
 ) : ViewModel() {
     var state by mutableStateOf(MovieDetailScreenState())
-
+        private set
     init {
         viewModelScope.launch {
             val id = savedStateHandle.toRoute<Destination.MovieDetails>().movieId

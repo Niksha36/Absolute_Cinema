@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,16 +36,16 @@ fun SortingDialog(
         Surface(
             shape = RoundedCornerShape(16.dp),
             color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 2.dp
+            tonalElevation = 2.dp,
         ){
 
-            Column(modifier = Modifier.padding(15.dp)) {
+            Column(modifier = Modifier.padding(15.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(Modifier.fillMaxWidth().clickable {
                     toggleSortOrder()
                 }, horizontalArrangement = Arrangement.SpaceBetween) {
                     Text(
                         text = "Сортировка",
-                        style = MaterialTheme.typography.titleSmall,
+                        style = MaterialTheme.typography.titleMedium,
                         color = Color.White,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
@@ -65,12 +68,15 @@ fun SortingDialog(
                     onClick = { onSortTypeSelected(FavoriteSortTypes.ByRating(state.dialogSortOrder)) },
                     text = stringResource(R.string.favorite_sort_type_rating)
                 )
-                Row(Modifier.fillMaxWidth()) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(15.dp, Alignment.End)) {
                     Button(
                         onClick = { onDismissRequest() },
                     ) { Text("Отмена") }
                     Button(
                         onClick = { applyChanges() },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        )
                     ) {
                         Text("Ок")
                     }

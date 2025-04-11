@@ -22,6 +22,7 @@ class SearchScreenViewModel @Inject constructor(
     val getMoviesByFilterUseCase: GetMoviesByFilterUseCase
 ) : ViewModel() {
     var state by mutableStateOf(SearchScreenState())
+        private set
     private var searchJob: Job? = null
 
     fun onEvent(event: SearchScreenEvent) {
